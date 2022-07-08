@@ -12,11 +12,12 @@ namespace GetTheRide.DataAccess
             NpgsqlConnectionStringBuilder sb = new NpgsqlConnectionStringBuilder()
             {
                 Database = "gettheride",
+                Host = "localhost",
                 Username = "postgres",
                 Password = "admin"
             };
 
-            //optionsBuilder.UseNpgsql(new dbcon)
+            optionsBuilder.UseNpgsql(sb.ToString());
 
             base.OnConfiguring(optionsBuilder);
         }
