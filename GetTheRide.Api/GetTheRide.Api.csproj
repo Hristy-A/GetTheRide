@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\GetTheRide.BL\GetTheRide.BL.csproj" />
+    <ProjectReference Include="..\GetTheRide.DataAccess\GetTheRide.DataAccess.csproj" />
     <ProjectReference Include="..\GetTheRide.Domain\GetTheRide.Domain.csproj" />
   </ItemGroup>
 

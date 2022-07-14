@@ -1,30 +1,22 @@
-using GetTheRide.BL.Mappings;
+using GetTheRide.Api.MiddlewaresConfigurations;
+using GetTheRide.Api.ServicesConfigurations;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+DbContextServiceConfiguration.Configure(builder);
 
-builder.Services.AddControllers();
+ControllersServiceConfiguration.Configure(builder);
 
-builder.Services.AddMappings();
-
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+SwaggerServiceConfiguration.Configure(builder);
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+DevelopmentModeConfiguration.Configure(app);
 
-app.UseHttpsRedirection();
+HttpsRedirectingConfiguration.Configure(app);
 
-app.UseAuthorization();
+AuthorizationConfiguration.Configure(app);
 
-app.MapControllers();
+ControllersConfiguration.Configure(app);
 
 app.Run();
