@@ -1,5 +1,7 @@
 ﻿using System.Reflection;
+using GetTheRide.DataAccess.EnumHelpers;
 using GetTheRide.DataAccess.Interfaces;
+using GetTheRide.Domain;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 
@@ -25,6 +27,8 @@ namespace GetTheRide.DataAccess
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetAssembly(typeof(GetTheRideDbContext))!);
+
+            modelBuilder.CreateTablesForAllEnums(typeof(TripState).Assembly);
 
             base.OnModelCreating(modelBuilder);
         }
