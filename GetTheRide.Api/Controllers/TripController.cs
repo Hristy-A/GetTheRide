@@ -38,13 +38,11 @@ namespace GetTheRide.Api.Controllers
                     Id = 1,
                     FirstName = "a",
                     LastName = "b",
-                    VehicleId = 1,
                     Vehicle = new Domain.Vehicle()
                     {
                         Id = 1,
                         Seats = 4,
                         Name = "car",
-                        UserId = 1
                     }
                 },
             };

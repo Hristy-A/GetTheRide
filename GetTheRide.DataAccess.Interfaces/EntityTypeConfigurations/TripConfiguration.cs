@@ -13,7 +13,18 @@ namespace GetTheRide.DataAccess.Interfaces.EntityTypeConfigurations
     {
         public void Configure(EntityTypeBuilder<Trip> builder)
         {
-            
+            builder.HasKey(t => t.Id);
+
+            builder
+                .HasOne(t => t.Driver)
+                .WithOne(u => u.Trip)
+                .HasForeignKey("DriverId")
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder
+                .HasMany(t => t.Passengers)
+                .WithOne(u => u.Trip)
+                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

@@ -6,7 +6,6 @@
         public string Name { get; set; } = null!;
         public int Seats { get; set; }
 
-        public int UserId { get; set; }
-        public virtual User User { get; set; } = null!;
+        public User User { get; set; } = null!;
     }
 }

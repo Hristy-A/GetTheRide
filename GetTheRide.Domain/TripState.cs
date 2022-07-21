@@ -1,10 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GetTheRide.Domain
 {
     public enum TripState
     {
-        Open,
+        Open = 1,
         Closed,
         Canceled
     }
@@ -12,13 +13,14 @@ namespace GetTheRide.Domain
     [EnumDescriber(typeof(TripState))]
     public class TripStateInfo
     {
-        public int TripStateId { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public int TripStateInfoId { get; set; }
         public string State { get; set; } = null!;
 
         public TripStateInfo() { }
         public TripStateInfo(TripState tripState)
         {
-            TripStateId = (int)tripState;
+            TripStateInfoId = (int)tripState;
             State = tripState.ToString();
         }
     }

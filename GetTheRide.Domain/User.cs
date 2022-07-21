@@ -6,7 +6,7 @@
         public string FirstName { get; set; } = null!;
         public string LastName { get; set; } = null!;
 
-        public int? VehicleId { get; set; }
-        public virtual Vehicle? Vehicle { get; set; }
+        public Vehicle? Vehicle { get; set; }
+        public Trip? Trip { get; set; }
     }
 }

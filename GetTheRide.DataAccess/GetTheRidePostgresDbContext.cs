@@ -9,6 +9,15 @@ namespace GetTheRide.DataAccess
 {
     public class GetTheRidePostgresDbContext : GetTheRideDbContext
     {
+        public GetTheRidePostgresDbContext()
+        {
+            
+        }
+        public GetTheRidePostgresDbContext(DbContextOptions<GetTheRideDbContext> options) : base(options)
+        {
+
+        }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             NpgsqlConnectionStringBuilder sb = new NpgsqlConnectionStringBuilder()
