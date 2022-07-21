@@ -1,3 +1,4 @@
+using AutoMapper.Configuration;
 using GetTheRide.Api.MiddlewaresConfigurations;
 using GetTheRide.Api.ServicesConfigurations;
 
@@ -6,6 +7,8 @@ var builder = WebApplication.CreateBuilder(args);
 DbContextServiceConfiguration.Configure(builder);
 
 ControllersServiceConfiguration.Configure(builder);
+
+MappingServiceConfiguration.Configure(builder);
 
 SwaggerServiceConfiguration.Configure(builder);
 
