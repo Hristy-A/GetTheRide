@@ -15,16 +15,9 @@ namespace GetTheRide.DataAccess.Interfaces.EntityTypeConfigurations
         {
             builder.HasKey(t => t.Id);
 
-            builder
-                .HasOne(t => t.Driver)
-                .WithOne(u => u.Trip)
-                .HasForeignKey("DriverId")
-                .OnDelete(DeleteBehavior.Restrict);
+            builder.HasIndex(t => t.Driver).IsUnique();
 
-            builder
-                .HasMany(t => t.Passengers)
-                .WithOne(u => u.Trip)
-                .OnDelete(DeleteBehavior.SetNull);
+            builder.Property(t => t.Passengers).HasField("_passengersList");
         }
     }
 }

@@ -5,11 +5,11 @@ namespace GetTheRide.DataAccess.Interfaces
 {
     public abstract class GetTheRideDbContext : DbContext
     {
-        public GetTheRideDbContext()
+        protected GetTheRideDbContext()
         {
 
         }
-        public GetTheRideDbContext(DbContextOptions<GetTheRideDbContext> options) : base(options)
+        protected GetTheRideDbContext(DbContextOptions<GetTheRideDbContext> options) : base(options)
         {
 
         }
