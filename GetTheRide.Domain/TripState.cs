@@ -1,24 +1,27 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using GetTheRide.Domain.Infrastructure;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GetTheRide.Domain
 {
     public enum TripState
     {
-        Open,
+        Open = 1,
         Closed,
         Canceled
     }
 
     [EnumDescriber(typeof(TripState))]
+    [Table("trip_state")]
     public class TripStateInfo
     {
-        public int TripStateId { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public int Id { get; set; }
         public string State { get; set; } = null!;
 
         public TripStateInfo() { }
         public TripStateInfo(TripState tripState)
         {
-            TripStateId = (int)tripState;
+            Id = (int)tripState;
             State = tripState.ToString();
         }
     }

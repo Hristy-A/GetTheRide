@@ -1,29 +1,42 @@
-using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
-using GetTheRide.BL;
+using Microsoft.AspNetCore.Mvc;
+using Trip = GetTheRide.BL.Trip;
 
 namespace GetTheRide.Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class TripController : ControllerBase
+    public class GetTheRideApiController : ControllerBase
     {
         private readonly IMapper _mapper;
 
-        private readonly ILogger<TripController> _logger;
+        private readonly ILogger<GetTheRideApiController> _logger;
 
-        public TripController(ILogger<TripController> logger, IMapper mapper)
+        public GetTheRideApiController(ILogger<GetTheRideApiController> logger, IMapper mapper)
         {
             _logger = logger;
             _mapper = mapper;
 
-            
+#if DEBUG
+            _logger.Log(LogLevel.Debug, "Dependencies successful injected");
+#endif
+
             // For single entity
             //_mapper.Map<Trip>(object)
 
             // For colelctions
             //_mapper.ProjectTo<Trip>(collection)
         }
+
+        //[HttpPost]
+        //public ActionResult<Driver> AddDriver(Driver driver, GetTheRideDbContext context)
+        //{
+        //    // if login exists checking
+
+        //    var user = _mapper.Map<User>(driver);
+
+        //    context.Users.Add(_mapper.Map<User>(driver));
+        //}
 
         [HttpGet(Name = "GetTrips")]
         public IEnumerable<Trip> Get()
@@ -38,13 +51,11 @@ namespace GetTheRide.Api.Controllers
                     Id = 1,
                     FirstName = "a",
                     LastName = "b",
-                    VehicleId = 1,
                     Vehicle = new Domain.Vehicle()
                     {
                         Id = 1,
                         Seats = 4,
                         Name = "car",
-                        UserId = 1
                     }
                 },
             };

@@ -7,11 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
+    <PackageReference Include="NLog" Version="5.0.1" />
+    <PackageReference Include="NLog.Web.AspNetCore" Version="5.1.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\GetTheRide.BL\GetTheRide.BL.csproj" />
+    <ProjectReference Include="..\GetTheRide.DataAccess\GetTheRide.DataAccess.csproj" />
     <ProjectReference Include="..\GetTheRide.Domain\GetTheRide.Domain.csproj" />
   </ItemGroup>
 

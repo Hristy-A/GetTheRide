@@ -1,30 +1,44 @@
-using GetTheRide.BL.Mappings;
+using GetTheRide.Api.Infrastructure;
+using GetTheRide.Api.MiddlewaresConfigurations;
+using GetTheRide.Api.ServicesConfigurations;
+using NLog;
+using NLog.Web;
 
-var builder = WebApplication.CreateBuilder(args);
+//HACK: Может быть врапнуть проверку и глобальное логирование в метод каким-либо способом, или оставить как есть?
 
-// Add services to the container.
+var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
+logger.Debug("init main");
 
-builder.Services.AddControllers();
-
-builder.Services.AddMappings();
-
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+try
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    var builder = WebApplication.CreateBuilder(args);
+
+    builder.UseNLogLoggingSystem();
+
+    // Configuring services with using Autofac
+    ServicesConfigurator.ConfigureServicesWithAutofac(builder);
+
+    // Configuring services with using standart Microsoft DI
+    // ServicesConfigurator.ConfigureServicesWithDefaultDI(builder);
+
+    var app = builder.Build();
+
+    DevelopmentModeConfiguration.Configure(app);
+
+    HttpsRedirectingConfiguration.Configure(app);
+
+    AuthorizationConfiguration.Configure(app);
+
+    ControllersConfiguration.Configure(app);
+
+    app.Run();
 }
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();
+catch (Exception exception)
+{
+    logger.Error(exception, "Stopped program because of unhandled exception");
+    throw;
+}
+finally
+{
+    NLog.LogManager.Shutdown();
+}

@@ -9,17 +9,18 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace GetTheRide.DataAccess.Interfaces.EntityTypeConfigurations
 {
-    internal class UserConfiguration : IEntityTypeConfiguration<User>
+    public class VehicleConfiguration : IEntityTypeConfiguration<Vehicle>
     {
-        public void Configure(EntityTypeBuilder<User> builder)
+        public void Configure(EntityTypeBuilder<Vehicle> builder)
         {
             builder
-                .Property(u => u.FirstName)
-                .HasMaxLength(64);
+                .Property(v => v.Name)
+                .HasMaxLength(100);
 
             builder
-                .Property(u => u.LastName)
-                .HasMaxLength(64);
+                .HasOne(v => v.User)
+                .WithOne(u => u.Vehicle)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

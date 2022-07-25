@@ -3,22 +3,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading.Tasks.Dataflow;
 using GetTheRide.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace GetTheRide.DataAccess.Interfaces.EntityTypeConfigurations
 {
-    internal class TripConfiguration : IEntityTypeConfiguration<Trip>
+    public class PassengerConfiguration : IEntityTypeConfiguration<Passenger>
     {
-        public void Configure(EntityTypeBuilder<Trip> builder)
+        public void Configure(EntityTypeBuilder<Passenger> builder)
         {
             builder
-                .HasOne(t => t.Driver)
-                .WithOne(u => u.Trip)
+                .HasOne(ut => ut.Trip)
+                .WithMany(t => t.Passengers)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            builder.HasIndex(t => t.UserId).IsUnique();
+            builder
+                .HasOne(ut => ut.User)
+                .WithOne()
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

@@ -4,6 +4,6 @@
     {
         public int Id { get; set; }
         public string Name { get; set; } = null!;
-        public string Vehicle { get; set; } = null!;
+        public Vehicle Vehicle { get; set; } = null!;
     }
 }
