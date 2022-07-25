@@ -1,6 +1,7 @@
-using AutoMapper.Configuration;
 using GetTheRide.Api.MiddlewaresConfigurations;
 using GetTheRide.Api.ServicesConfigurations;
+using GetTheRide.DataAccess;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
