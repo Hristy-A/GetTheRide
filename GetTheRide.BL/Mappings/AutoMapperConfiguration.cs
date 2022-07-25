@@ -11,12 +11,8 @@ namespace GetTheRide.BL.Mappings
             {
                 a.CreateMap<Domain.User, Driver>()
                     .ForMember(d => d.Name, o => o.MapFrom(s => $"{s.FirstName} {s.LastName}"))
-                    .ForMember(d => d.Vehicle, o => o.MapFrom(s => s.Vehicle!.Name))
+                    .ForMember(d => d.Vehicle, o => o.MapFrom(s => s.Vehicle))
                     .ReverseMap();
-
-                //a.CreateMap<Driver, Vehicle>()
-                //    .ForMember(v => v.Name, o => o.MapFrom(d => d.Name))
-                //    .ForMember(v => v.Seats, o => o.);
 
                 a.CreateMap<Domain.Trip, Trip>()
                     .ForMember(d => d.State, o => o.MapFrom(s => s.State.ToString()))
