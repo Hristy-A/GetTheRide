@@ -13,12 +13,6 @@ namespace GetTheRide.DataAccess.Interfaces.EntityTypeConfigurations
     {
         public void Configure(EntityTypeBuilder<User> builder)
         {
-            builder.HasKey(u => u.Id);
-
-            builder
-                .HasOne(u => u.Trip)
-                .WithMany(t => t.Passengers);
-
             builder
                 .Property(u => u.FirstName)
                 .HasMaxLength(64);

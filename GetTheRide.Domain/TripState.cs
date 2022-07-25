@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using GetTheRide.Domain.Infrastructure;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GetTheRide.Domain
@@ -11,16 +11,17 @@ namespace GetTheRide.Domain
     }
 
     [EnumDescriber(typeof(TripState))]
+    [Table("trip_state")]
     public class TripStateInfo
     {
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int TripStateInfoId { get; set; }
+        public int Id { get; set; }
         public string State { get; set; } = null!;
 
         public TripStateInfo() { }
         public TripStateInfo(TripState tripState)
         {
-            TripStateInfoId = (int)tripState;
+            Id = (int)tripState;
             State = tripState.ToString();
         }
     }

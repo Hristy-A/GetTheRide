@@ -10,23 +10,19 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace GetTheRide.DataAccess.Interfaces.EntityTypeConfigurations
 {
-    public class UserTripConfiguration : IEntityTypeConfiguration<UserTrip>
+    public class UserTripConfiguration : IEntityTypeConfiguration<Passenger>
     {
-        public void Configure(EntityTypeBuilder<UserTrip> builder)
+        public void Configure(EntityTypeBuilder<Passenger> builder)
         {
-            builder.HasKey(ut => ut.Id);
-
             builder
                 .HasOne(ut => ut.Trip)
                 .WithMany(t => t.Passengers)
-                .OnDelete(DeleteBehavior.Restrict)
-                .HasForeignKey("TripId");
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder
                 .HasOne(ut => ut.User)
                 .WithOne()
-                .OnDelete(DeleteBehavior.Restrict)
-                .HasForeignKey("UserId");
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

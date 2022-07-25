@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 using GetTheRide.DataAccess.EnumHelpers.Exceptions;
-using GetTheRide.Domain;
+using GetTheRide.Domain.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
 namespace GetTheRide.DataAccess.EnumHelpers;
@@ -24,7 +24,16 @@ public static class EnumInitializer
                     $"In the describer type {type.EnumTypeInfo.Name} not exists constructor with the single parameter " +
                     $"of type {type.EnumType.Name}, which describes enum type."));
 
-            foreach (var enumValue in Enum.GetValues(type.EnumType))
+            var enumValues = Enum.GetValues(type.EnumType);
+
+            for (int i = 0; i < enumValues.Length; i++)
+            {
+                if(((int)enumValues.GetValue(i)!) != i + 1)
+                    throw new IncorrectEnumSetupException(
+                        "Enum values must start at 1 and increase with each successive member by 1.");
+            }
+
+            foreach (var enumValue in enumValues)
             {
                 modelBuilder.Entity(type.EnumTypeInfo).HasData(constructor.Invoke(new[] { enumValue }));
             }
@@ -56,7 +65,16 @@ public static class EnumInitializer
                               $"In the describer type {enumTypeInfo.Name} not exists constructor with the single parameter " +
                               $"of type {enumType.Name}, which describes enum type."));
 
-        foreach (var enumValue in Enum.GetValues(enumType))
+        var enumValues = Enum.GetValues(enumType);
+
+        for (int i = 0; i < enumValues.Length; i++)
+        {
+            if (((int)enumValues.GetValue(i)!) != i + 1)
+                throw new IncorrectEnumSetupException(
+                    "Enum values must start at 1 and increase with each successive member by 1.");
+        }
+
+        foreach (var enumValue in enumValues)
         {
             modelBuilder.Entity(enumTypeInfo).HasData(constructor.Invoke(new[] { enumValue }));
         }

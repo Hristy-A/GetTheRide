@@ -4,22 +4,15 @@
     {
         public Trip()
         {
-            Passengers = new HashSet<UserTrip>();
+            Passengers = new HashSet<Passenger>();
         }
 
         public int Id { get; set; }
         public int AvailableSeats { get; set; }
         public TripState State { get; set; }
+        public int UserId { get; set; }
 
         public virtual User Driver { get; set; } = null!;
-        public ICollection<UserTrip> Passengers { get; set; }
-    }
-
-    public class UserTrip
-    {
-        public int Id { get; set; }
-
-        public Trip Trip { get; set; } = null!;
-        public virtual User User { get; set; } = null!;
+        public ICollection<Passenger> Passengers { get; set; }
     }
 }

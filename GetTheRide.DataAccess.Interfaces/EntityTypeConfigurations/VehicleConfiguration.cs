@@ -13,8 +13,6 @@ namespace GetTheRide.DataAccess.Interfaces.EntityTypeConfigurations
     {
         public void Configure(EntityTypeBuilder<Vehicle> builder)
         {
-            builder.HasKey(v => v.Id);
-
             builder
                 .Property(v => v.Name)
                 .HasMaxLength(100);
@@ -22,7 +20,6 @@ namespace GetTheRide.DataAccess.Interfaces.EntityTypeConfigurations
             builder
                 .HasOne(v => v.User)
                 .WithOne(u => u.Vehicle)
-                .HasForeignKey("UserId")
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }

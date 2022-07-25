@@ -1,4 +1,4 @@
-﻿namespace GetTheRide.Domain;
+﻿namespace GetTheRide.Domain.Infrastructure;
 
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
 public class EnumDescriberAttribute : Attribute

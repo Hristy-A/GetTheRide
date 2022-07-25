@@ -9,7 +9,7 @@ namespace GetTheRide.DataAccess.Interfaces
         {
 
         }
-        protected GetTheRideDbContext(DbContextOptions<GetTheRideDbContext> options) : base(options)
+        protected GetTheRideDbContext(DbContextOptions options) : base(options)
         {
 
         }

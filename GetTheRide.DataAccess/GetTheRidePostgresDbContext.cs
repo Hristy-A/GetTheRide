@@ -13,22 +13,14 @@ namespace GetTheRide.DataAccess
         {
             
         }
-        public GetTheRidePostgresDbContext(DbContextOptions<GetTheRideDbContext> options) : base(options)
+        public GetTheRidePostgresDbContext(DbContextOptions options) : base(options)
         {
 
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            NpgsqlConnectionStringBuilder sb = new NpgsqlConnectionStringBuilder()
-            {
-                Database = "gettheride",
-                Host = "localhost",
-                Username = "postgres",
-                Password = "admin"
-            };
-
-            optionsBuilder.UseNpgsql(sb.ToString());
+            optionsBuilder.UseSnakeCaseNamingConvention();
 
             base.OnConfiguring(optionsBuilder);
         }
