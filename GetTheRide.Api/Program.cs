@@ -1,26 +1,51 @@
+using Autofac.Extensions.DependencyInjection;
 using GetTheRide.Api.MiddlewaresConfigurations;
 using GetTheRide.Api.ServicesConfigurations;
-using GetTheRide.DataAccess;
-using Microsoft.EntityFrameworkCore;
+using NLog;
+using NLog.Web;
 
-var builder = WebApplication.CreateBuilder(args);
+var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
+logger.Debug("init main");
 
-DbContextServiceConfiguration.Configure(builder);
+try
+{
+    var builder = WebApplication.CreateBuilder(args);
 
-ControllersServiceConfiguration.Configure(builder);
+    builder.Logging.ClearProviders();
+    builder.Host.UseNLog();
 
-MappingServiceConfiguration.Configure(builder);
+    builder.Host
+        .UseServiceProviderFactory(new AutofacServiceProviderFactory())
+        //.ConfigureContainer<ContainerBuilder>(builder =>
+        //  builder.);
+        ;
 
-SwaggerServiceConfiguration.Configure(builder);
+    DbContextServiceConfiguration.Configure(builder);
 
-var app = builder.Build();
+    ControllersServiceConfiguration.Configure(builder);
 
-DevelopmentModeConfiguration.Configure(app);
+    MappingServiceConfiguration.Configure(builder);
 
-HttpsRedirectingConfiguration.Configure(app);
+    SwaggerServiceConfiguration.Configure(builder);
 
-AuthorizationConfiguration.Configure(app);
+    var app = builder.Build();
 
-ControllersConfiguration.Configure(app);
+    DevelopmentModeConfiguration.Configure(app);
 
-app.Run();
+    HttpsRedirectingConfiguration.Configure(app);
+
+    AuthorizationConfiguration.Configure(app);
+
+    ControllersConfiguration.Configure(app);
+
+    app.Run();
+}
+catch (Exception exception)
+{
+    logger.Error(exception, "Stopped program because of exception");
+    throw;
+}
+finally
+{
+    NLog.LogManager.Shutdown();
+}
