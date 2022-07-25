@@ -1,8 +1,10 @@
-using Autofac.Extensions.DependencyInjection;
+using GetTheRide.Api.Infrastructure;
 using GetTheRide.Api.MiddlewaresConfigurations;
 using GetTheRide.Api.ServicesConfigurations;
 using NLog;
 using NLog.Web;
+
+//HACK: Может быть врапнуть проверку и глобальное логирование в метод каким-либо способом, или оставить как есть?
 
 var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
 logger.Debug("init main");
@@ -11,22 +13,13 @@ try
 {
     var builder = WebApplication.CreateBuilder(args);
 
-    builder.Logging.ClearProviders();
-    builder.Host.UseNLog();
+    builder.UseNLogLoggingSystem();
 
-    builder.Host
-        .UseServiceProviderFactory(new AutofacServiceProviderFactory())
-        //.ConfigureContainer<ContainerBuilder>(builder =>
-        //  builder.);
-        ;
+    // Configuring services with using Autofac
+    ServicesConfigurator.ConfigureServicesWithAutofac(builder);
 
-    DbContextServiceConfiguration.Configure(builder);
-
-    ControllersServiceConfiguration.Configure(builder);
-
-    MappingServiceConfiguration.Configure(builder);
-
-    SwaggerServiceConfiguration.Configure(builder);
+    // Configuring services with using standart Microsoft DI
+    // ServicesConfigurator.ConfigureServicesWithDefaultDI(builder);
 
     var app = builder.Build();
 
@@ -42,7 +35,7 @@ try
 }
 catch (Exception exception)
 {
-    logger.Error(exception, "Stopped program because of exception");
+    logger.Error(exception, "Stopped program because of unhandled exception");
     throw;
 }
 finally
