@@ -1,8 +1,5 @@
-using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
-using GetTheRide.BL;
-using GetTheRide.DataAccess.Interfaces;
-using GetTheRide.Domain;
+using Microsoft.AspNetCore.Mvc;
 using Trip = GetTheRide.BL.Trip;
 
 namespace GetTheRide.Api.Controllers

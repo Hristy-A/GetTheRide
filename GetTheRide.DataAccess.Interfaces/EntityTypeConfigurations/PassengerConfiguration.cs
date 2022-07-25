@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace GetTheRide.DataAccess.Interfaces.EntityTypeConfigurations
 {
-    public class UserTripConfiguration : IEntityTypeConfiguration<Passenger>
+    public class PassengerConfiguration : IEntityTypeConfiguration<Passenger>
     {
         public void Configure(EntityTypeBuilder<Passenger> builder)
         {
