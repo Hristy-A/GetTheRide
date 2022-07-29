@@ -1,40 +1,42 @@
-using GetTheRide.Api.Infrastructure;
-using GetTheRide.Api.MiddlewaresConfigurations;
-using GetTheRide.Api.ServicesConfigurations;
-using NLog;
-using NLog.Web;
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
+using GetTheRide.Api.ServicesConfigurations.Autofac;
+using GetTheRide.BL.Mappings;
+using GetTheRide.DataAccess;
+using GetTheRide.DataAccess.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using NLog.Extensions.Logging;
 
-//HACK: Может быть врапнуть проверку и глобальное логирование в метод каким-либо способом, или оставить как есть?
+var builder = WebApplication.CreateBuilder(args);
 
-var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
-logger.Debug("init main");
+builder.Logging
+    .ClearProviders()
+    .AddNLog(new NLogLoggingConfiguration(builder.Configuration.GetRequiredSection("NLog")));
 
-try
+builder.Host
+    .UseServiceProviderFactory(new AutofacServiceProviderFactory())
+    .ConfigureContainer<ContainerBuilder>(builder =>
+        builder.RegisterModule(new AppConfiguration()));
+
+builder.Services
+    .AddDbContext<GetTheRideDbContext, GetTheRidePostgresDbContext>(options =>
+    {
+        options.UseNpgsql(builder.Configuration.GetConnectionString("Postgres"));
+    })
+    .AddEndpointsApiExplorer()
+    .AddSwaggerGen()
+    .AddMappings()
+    .AddControllers();
+
+var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
 {
-    var builder = WebApplication.CreateBuilder(args);
-
-    builder.UseNLogLoggingSystem();
-
-    ServicesConfigurator.ConfigureServicesWithDefaultDI(builder);
-
-    var app = builder.Build();
-
-    DevelopmentModeConfiguration.Configure(app);
-
-    HttpsRedirectingConfiguration.Configure(app);
-
-    AuthorizationConfiguration.Configure(app);
-
-    ControllersConfiguration.Configure(app);
-
-    app.Run();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
-catch (Exception exception)
-{
-    logger.Error(exception, "Stopped program because of unhandled exception");
-    throw;
-}
-finally
-{
-    NLog.LogManager.Shutdown();
-}
+
+app.UseHttpsRedirection();
+app.MapControllers();
+
+app.Run();
