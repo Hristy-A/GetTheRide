@@ -16,7 +16,8 @@ namespace GetTheRide.DataAccess.Migrations
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     available_seats = table.Column<int>(type: "integer", nullable: false),
-                    state = table.Column<int>(type: "integer", nullable: false)
+                    state = table.Column<int>(type: "integer", nullable: false),
+                    driver_id = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -32,14 +33,21 @@ namespace GetTheRide.DataAccess.Migrations
                     first_name = table.Column<string>(type: "text", nullable: false),
                     last_name = table.Column<string>(type: "text", nullable: false),
                     vehicle_id = table.Column<int>(type: "integer", nullable: false),
-                    trip_id = table.Column<int>(type: "integer", nullable: false)
+                    driver_trip_id = table.Column<int>(type: "integer", nullable: false),
+                    passenger_trip_id = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("pk_users", x => x.id);
                     table.ForeignKey(
+                        name: "fk_users_trips_driver_trip_id1",
+                        column: x => x.driver_trip_id,
+                        principalTable: "trips",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
                         name: "fk_users_trips_trip_id",
-                        column: x => x.trip_id,
+                        column: x => x.passenger_trip_id,
                         principalTable: "trips",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
@@ -53,28 +61,34 @@ namespace GetTheRide.DataAccess.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     name = table.Column<string>(type: "text", nullable: false),
                     seats = table.Column<int>(type: "integer", nullable: false),
-                    user_id = table.Column<int>(type: "integer", nullable: false)
+                    driver_id = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("pk_vehicles", x => x.id);
                     table.ForeignKey(
-                        name: "fk_vehicles_users_user_id",
-                        column: x => x.user_id,
+                        name: "fk_vehicles_users_driver_id",
+                        column: x => x.driver_id,
                         principalTable: "users",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "ix_users_trip_id",
+                name: "ix_users_driver_trip_id",
                 table: "users",
-                column: "trip_id");
+                column: "driver_trip_id",
+                unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "ix_vehicles_user_id",
+                name: "ix_users_passenger_trip_id",
+                table: "users",
+                column: "passenger_trip_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_vehicles_driver_id",
                 table: "vehicles",
-                column: "user_id",
+                column: "driver_id",
                 unique: true);
         }
 

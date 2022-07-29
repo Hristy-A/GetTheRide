@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GetTheRide.DataAccess.Migrations
 {
     [DbContext(typeof(GetTheRidePostgresDbContext))]
-    [Migration("20220729185222_Initial")]
+    [Migration("20220729194325_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -36,6 +36,10 @@ namespace GetTheRide.DataAccess.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("available_seats");
 
+                    b.Property<int>("DriverId")
+                        .HasColumnType("integer")
+                        .HasColumnName("driver_id");
+
                     b.Property<int>("State")
                         .HasColumnType("integer")
                         .HasColumnName("state");
@@ -55,6 +59,10 @@ namespace GetTheRide.DataAccess.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("DriverTripId")
+                        .HasColumnType("integer")
+                        .HasColumnName("driver_trip_id");
+
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("text")
@@ -65,9 +73,9 @@ namespace GetTheRide.DataAccess.Migrations
                         .HasColumnType("text")
                         .HasColumnName("last_name");
 
-                    b.Property<int>("TripId")
+                    b.Property<int>("PassengerTripId")
                         .HasColumnType("integer")
-                        .HasColumnName("trip_id");
+                        .HasColumnName("passenger_trip_id");
 
                     b.Property<int>("VehicleId")
                         .HasColumnType("integer")
@@ -76,8 +84,12 @@ namespace GetTheRide.DataAccess.Migrations
                     b.HasKey("Id")
                         .HasName("pk_users");
 
-                    b.HasIndex("TripId")
-                        .HasDatabaseName("ix_users_trip_id");
+                    b.HasIndex("DriverTripId")
+                        .IsUnique()
+                        .HasDatabaseName("ix_users_driver_trip_id");
+
+                    b.HasIndex("PassengerTripId")
+                        .HasDatabaseName("ix_users_passenger_trip_id");
 
                     b.ToTable("users", (string)null);
                 });
@@ -91,6 +103,10 @@ namespace GetTheRide.DataAccess.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("DriverId")
+                        .HasColumnType("integer")
+                        .HasColumnName("driver_id");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text")
@@ -100,46 +116,54 @@ namespace GetTheRide.DataAccess.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("seats");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer")
-                        .HasColumnName("user_id");
-
                     b.HasKey("Id")
                         .HasName("pk_vehicles");
 
-                    b.HasIndex("UserId")
+                    b.HasIndex("DriverId")
                         .IsUnique()
-                        .HasDatabaseName("ix_vehicles_user_id");
+                        .HasDatabaseName("ix_vehicles_driver_id");
 
                     b.ToTable("vehicles", (string)null);
                 });
 
             modelBuilder.Entity("GetTheRide.Domain.User", b =>
                 {
-                    b.HasOne("GetTheRide.Domain.Trip", "Trip")
+                    b.HasOne("GetTheRide.Domain.Trip", "DriverTrip")
+                        .WithOne("Driver")
+                        .HasForeignKey("GetTheRide.Domain.User", "DriverTripId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_users_trips_driver_trip_id1");
+
+                    b.HasOne("GetTheRide.Domain.Trip", "PassengerTrip")
                         .WithMany("Passengers")
-                        .HasForeignKey("TripId")
+                        .HasForeignKey("PassengerTripId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
                         .HasConstraintName("fk_users_trips_trip_id");
 
-                    b.Navigation("Trip");
+                    b.Navigation("DriverTrip");
+
+                    b.Navigation("PassengerTrip");
                 });
 
             modelBuilder.Entity("GetTheRide.Domain.Vehicle", b =>
                 {
                     b.HasOne("GetTheRide.Domain.User", "User")
                         .WithOne("Vehicle")
-                        .HasForeignKey("GetTheRide.Domain.Vehicle", "UserId")
+                        .HasForeignKey("GetTheRide.Domain.Vehicle", "DriverId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_vehicles_users_user_id");
+                        .HasConstraintName("fk_vehicles_users_driver_id");
 
                     b.Navigation("User");
                 });
 
             modelBuilder.Entity("GetTheRide.Domain.Trip", b =>
                 {
+                    b.Navigation("Driver")
+                        .IsRequired();
+
                     b.Navigation("Passengers");
                 });
 

@@ -20,4 +20,8 @@
     <ProjectReference Include="..\GetTheRide.Domain\GetTheRide.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
 </Project>
