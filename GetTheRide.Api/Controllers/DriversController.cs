@@ -2,6 +2,7 @@
 using GetTheRide.BL;
 using GetTheRide.DataAccess.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 
 namespace GetTheRide.Api.Controllers
 {
@@ -26,7 +27,19 @@ namespace GetTheRide.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateAsync([FromBody] Driver user)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var dbUser = _mapper.Map<Domain.User>(user);
+                await _dbContext.Users.AddAsync(dbUser);
+                await _dbContext.SaveChangesAsync();
+
+                //var createdUser = await _dbContext.Users.FirstOrDefault(x=>x.)
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
         }
 
         [HttpDelete("{userId}")]
