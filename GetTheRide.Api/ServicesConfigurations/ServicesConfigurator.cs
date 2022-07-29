@@ -1,6 +1,13 @@
 ﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using GetTheRide.Api.ServicesConfigurations.Autofac;
+using GetTheRide.BL.Mappings;
+using GetTheRide.DataAccess;
+using GetTheRide.DataAccess.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using NLog.Web;
+using NLog.
+using NLog.Config;
 
 namespace GetTheRide.Api.ServicesConfigurations
 {
@@ -8,22 +15,24 @@ namespace GetTheRide.Api.ServicesConfigurations
     {
         internal static void ConfigureServicesWithDefaultDI(WebApplicationBuilder builder)
         {
-            DbContextServiceConfiguration.Configure(builder);
+            builder.Logging
+                .ClearProviders()
+                .AddNLog(LoggingConfiguration);
 
-            ControllersServiceConfiguration.Configure(builder);
-
-            MappingServiceConfiguration.Configure(builder);
-
-            SwaggerServiceConfiguration.Configure(builder);
-        }
-
-        public static void ConfigureServicesWithAutofac(WebApplicationBuilder builder)
-        {
             builder.Host
                 .UseServiceProviderFactory(new AutofacServiceProviderFactory())
                 .ConfigureContainer<ContainerBuilder>(builder =>
                     builder.RegisterModule(new AppConfiguration()));
-            ;
+
+            builder.Services
+                .AddDbContext<GetTheRideDbContext, GetTheRidePostgresDbContext>(options =>
+                {
+                    options.UseNpgsql(builder.Configuration.GetConnectionString("Postgres"));
+                })
+                .AddEndpointsApiExplorer()
+                .AddSwaggerGen()
+                .AddMappings()
+                .AddControllers();
         }
     }
 }

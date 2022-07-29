@@ -15,11 +15,7 @@ try
 
     builder.UseNLogLoggingSystem();
 
-    // Configuring services with using Autofac
-    ServicesConfigurator.ConfigureServicesWithAutofac(builder);
-
-    // Configuring services with using standart Microsoft DI
-    // ServicesConfigurator.ConfigureServicesWithDefaultDI(builder);
+    ServicesConfigurator.ConfigureServicesWithDefaultDI(builder);
 
     var app = builder.Build();
 
