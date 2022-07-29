@@ -1,25 +1,26 @@
 using AutoMapper;
+using GetTheRide.DataAccess.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Trip = GetTheRide.BL.Trip;
 
 namespace GetTheRide.Api.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
-    public class GetTheRideApiController : ControllerBase
+    [Route("api/v1/[controller]")]
+    public class TripController : ControllerBase
     {
         private readonly IMapper _mapper;
+        private readonly ILogger<TripController> _logger;
+        private readonly GetTheRideDbContext _dbContext;
 
-        private readonly ILogger<GetTheRideApiController> _logger;
-
-        public GetTheRideApiController(ILogger<GetTheRideApiController> logger, IMapper mapper)
+        public TripController(
+            ILogger<TripController> logger, 
+            IMapper mapper, 
+            GetTheRideDbContext dbContext)
         {
             _logger = logger;
             _mapper = mapper;
-
-#if DEBUG
-            _logger.Log(LogLevel.Debug, "Dependencies successful injected");
-#endif
+            _dbContext = dbContext;
 
             // For single entity
             //_mapper.Map<Trip>(object)
