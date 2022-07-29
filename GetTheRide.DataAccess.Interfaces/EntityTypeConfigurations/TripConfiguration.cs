@@ -10,12 +10,14 @@ namespace GetTheRide.DataAccess.Interfaces.EntityTypeConfigurations
         {
             builder
                 .HasMany(x => x.Passengers)
-                .WithOne(u => u.PassengerTrip)
+                .WithOne(x => x.PassengerTrip)
+                .HasForeignKey(x => x.PassengerTripId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder
                 .HasOne(x => x.Driver)
-                .WithOne(u => u.DriverTrip)
+                .WithOne(x => x.DriverTrip)
+                .HasForeignKey<User>(x => x.DriverTripId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }
