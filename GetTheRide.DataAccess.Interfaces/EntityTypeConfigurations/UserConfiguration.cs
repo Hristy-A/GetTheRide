@@ -11,7 +11,7 @@ namespace GetTheRide.DataAccess.Interfaces.EntityTypeConfigurations
             builder
                 .HasOne(x => x.Vehicle)
                 .WithOne(x => x.User)
-                .HasForeignKey<Vehicle>(x => x.UserId);
+                .HasForeignKey<Vehicle>(x => x.DriverId);
         }
     }
 }
