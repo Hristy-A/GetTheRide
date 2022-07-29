@@ -29,7 +29,7 @@ namespace GetTheRide.DataAccess
         {
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetAssembly(typeof(GetTheRideDbContext))!);
 
-            modelBuilder.CreateTablesForAllEnums(typeof(TripState).Assembly);
+            //modelBuilder.CreateTablesForAllEnums(typeof(TripState).Assembly);
 
             base.OnModelCreating(modelBuilder);
         }
