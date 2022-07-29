@@ -16,29 +16,29 @@ post: Create new Trip
 
 - /drivers
 post: Create driver's account
-put: Edit driver's account
-delete: Delete driver's account
 - /{id}
   get: Get driver's account info
+  put: Edit driver's account
+  delete: Delete driver's account
 
 - /passengers
 post: Create passenger's account
-put: Edit passenger's account
-delete: Delete passenger's account
 - /{id}
   get: Get passenger's account info
+  put: Edit passenger's account
+  delete: Delete passenger's account
    */
 
     [ApiController]
     [Route("api/v1/[controller]")]
-    public class TripController : ControllerBase, ITripController
+    public class TripsController : ControllerBase, ITripController
     {
         private readonly IMapper _mapper;
-        private readonly ILogger<TripController> _logger;
+        private readonly ILogger<TripsController> _logger;
         private readonly GetTheRideDbContext _dbContext;
 
-        public TripController(
-            ILogger<TripController> logger,
+        public TripsController(
+            ILogger<TripsController> logger,
             IMapper mapper,
             GetTheRideDbContext dbContext)
         {
