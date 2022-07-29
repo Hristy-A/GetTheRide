@@ -12,10 +12,9 @@ namespace GetTheRide.Domain
         public int Id { get; set; }
         public int AvailableSeats { get; set; }
         public TripState State { get; set; }
-        //public int DriverId { get; set; }
+        public int DriverId { get; set; }
 
-        //[NotMapped]
-        //public virtual User Driver { get; set; } = null!;
+        public virtual User Driver { get; set; } = null!;
         public virtual ICollection<User> Passengers { get; set; }
     }
 }

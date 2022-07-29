@@ -6,9 +6,9 @@
         public string FirstName { get; set; } = null!;
         public string LastName { get; set; } = null!;
         public int VehicleId { get; set; }
-        public int TripId { get; set; }
 
         public virtual Vehicle? Vehicle { get; set; }
-        public virtual Trip? Trip { get; set; }
+        public virtual Trip? DriverTrip { get; set; }
+        public virtual Trip? PassengerTrip { get; set; }
     }
 }
